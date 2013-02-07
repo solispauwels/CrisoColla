@@ -1,0 +1,5 @@
+criso_colla_theme_homepage:
+    pattern:  /{path}
+    defaults: { _controller: CrisoCollaThemeBundle:Default:index }
+    requirements:
+        path: ".+"

@@ -1,0 +1,7 @@
+parameters:
+#    criso_colla_theme.example.class: CrisoColla\ThemeBundle\Example
+
+services:
+#    criso_colla_theme.example:
+#        class: %criso_colla_theme.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
