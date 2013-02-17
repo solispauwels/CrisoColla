@@ -1,5 +1,12 @@
-criso_colla_theme_homepage:
-    pattern:  /{path}
-    defaults: { _controller: CrisoCollaThemeBundle:Default:index }
+criso_colla_theme_home:
+    pattern: /
+    defaults: { _controller: CrisoCollaThemeBundle:Theme:renderPath }
     requirements:
         path: ".+"
+
+criso_colla_theme_render_path:
+    pattern: /{path}
+    defaults: { _controller: CrisoCollaThemeBundle:Theme:renderPath }
+    requirements:
+        path: ".+"
+
