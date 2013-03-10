@@ -12,6 +12,7 @@ class ThemeController extends Controller
 	{
 		/**
 		 * @TODO Load from regions.
+		 * @TODO Title, openGraph, Java Script, CSS and RSS
 		 */
 		$this->theme=array
 			(
@@ -19,7 +20,7 @@ class ThemeController extends Controller
 				//"left" => "",
 				//"right" => "",
 				//"content" => "",
-				//"footer" => "",	
+				"footer" => "CrisoColla 2013",	
 			);
 
 		$this->theme['theme']="Default";

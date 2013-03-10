@@ -1,3 +1,7 @@
+criso_colla_content:
+    resource: "@CrisoCollaContentBundle/Resources/config/routing.yml"
+    prefix:   /notheme/
+
 criso_colla_test:
     resource: "@CrisoCollaTestBundle/Resources/config/routing.yml"
     prefix:   /notheme/
