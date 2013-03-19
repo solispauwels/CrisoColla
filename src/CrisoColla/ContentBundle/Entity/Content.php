@@ -16,7 +16,6 @@ class Content
     {
         $this->created = new \Datetime();
         $this->modified = new \Datetime();
-        $this->weight = 0;
     }
 
     /**
@@ -42,6 +41,13 @@ class Content
      */
     private $content;
 
+        /**
+     * @var string
+     *
+     * @ORM\Column(name="generated_content", type="text", nullable=true)
+     */
+    private $generated_content;
+
     /**
      * @var \DateTime
      *
@@ -55,13 +61,6 @@ class Content
      * @ORM\Column(name="modified", type="datetime")
      */
     private $modified;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="weight", type="integer", nullable=true)
-     */
-    private $weight;
 
 
     /**
@@ -167,25 +166,25 @@ class Content
     }
 
     /**
-     * Set weight
+     * Set generated_content
      *
-     * @param integer $weight
+     * @param string $generatedContent
      * @return Content
      */
-    public function setWeight($weight)
+    public function setGeneratedContent($generatedContent)
     {
-        $this->weight = $weight;
+        $this->generated_content = $generatedContent;
     
         return $this;
     }
 
     /**
-     * Get weight
+     * Get generated_content
      *
-     * @return integer 
+     * @return string 
      */
-    public function getWeight()
+    public function getGeneratedContent()
     {
-        return $this->weight;
+        return $this->generated_content;
     }
 }
