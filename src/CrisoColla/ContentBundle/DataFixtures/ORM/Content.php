@@ -14,7 +14,7 @@ class Categories implements FixtureInterface
 
         foreach($fixtures as $i => $fixture)
         {
-            $content[$i] = new Categorie();
+            $content[$i] = new Content();
             $content[$i]->setContent($fixture);
 
             $manager->persist($content[$i]);
