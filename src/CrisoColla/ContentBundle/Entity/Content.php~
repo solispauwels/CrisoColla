@@ -44,7 +44,7 @@ class Content
         /**
      * @var string
      *
-     * @ORM\Column(name="generated_content", type="text", nullable=true)
+     * @ORM\Column(name="generated_content", type="string", length=255, nullable=true)
      */
     private $generated_content;
 
@@ -163,5 +163,28 @@ class Content
     public function getModified()
     {
         return $this->modified;
+    }
+
+    /**
+     * Set generated_content
+     *
+     * @param string $generatedContent
+     * @return Content
+     */
+    public function setGeneratedContent($generatedContent)
+    {
+        $this->generated_content = $generatedContent;
+    
+        return $this;
+    }
+
+    /**
+     * Get generated_content
+     *
+     * @return string 
+     */
+    public function getGeneratedContent()
+    {
+        return $this->generated_content;
     }
 }
