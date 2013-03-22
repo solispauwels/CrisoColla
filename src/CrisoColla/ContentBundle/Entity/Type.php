@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Type
 {
+    public function __construct()
+    {
+        $this->max_content_page = 100;
+    } 
+
     /**
      * @var integer
      *

@@ -1,0 +1,11 @@
+{% if content != null %}
+
+<div class="{{ size }}" style="border:1px solid red">
+
+    <h3>{{ content.title }}</h3>
+    <p>{{ content.content }}</p>
+    <i>{{ content.created|date('d/m/Y') }}</i>
+
+</div>
+
+{% endif %}
