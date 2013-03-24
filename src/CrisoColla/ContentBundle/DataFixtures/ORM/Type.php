@@ -2,11 +2,12 @@
 
 namespace CrisoColla\ContentBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use CrisoColla\ContentBundle\Entity\Type;
 
-class Types implements FixtureInterface
+class Types extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
@@ -22,4 +23,10 @@ class Types implements FixtureInterface
 
         $manager->flush();
     }
+
+    public function getOrder()
+    {
+        return 1; // the order in which fixtures will be loaded
+    }
+    
 }

@@ -35,11 +35,11 @@ class ThemeController extends Controller
                 //"left" => "",
                 //"right" => "",
                 //"content" => "",
-                "footer" => "CrisoColla 2013",	
+                "footer" => "Footer",	
             );
 
-            $this->theme['theme']=$this->settings->getTheme();
-        
+	    $this->theme['theme']=$this->settings->getTheme();
+            $this->theme['title']=$this->settings->getCompanyName();
         }
     }
     
@@ -61,25 +61,14 @@ class ThemeController extends Controller
             $this->theme["content"] = $this->render('CrisoCollaThemeBundle::error.html.twig', array('path' => $path))->getContent();
         }
 
-        echo $this->defaultTemplate('CrisoCollaThemeBundle::erqsdfror.html.twig');
-
-        return $this->render('CrisoCollaThemeBundle:'.$this->theme['theme'].':layout.html.twig', $this->theme);
+        return $this->render($this->defaultTemplate('CrisoCollaThemeBundle:'.$this->theme['theme'].':layout.html.twig'), $this->theme);
     }
 
     public function defaultTemplate($path)
     {
         $dir = explode(":", $path);
 
-        $file = explode(".", $dir[count($dir)-1]);
-
-        if($file[count($file)]=="twig")
-        {
-            $base = __DIR__."/../Resources/views/";
-        }
-        else
-        {
-            $base = "/";
-        }
+ 	$base = __DIR__."/../Resources/views/";
         
         if($dir[1]=="")
         {
@@ -103,16 +92,11 @@ class ThemeController extends Controller
         }
         else
         {
-            if($base=="/")
-            {
-                $file[0] = "defaultController";
-            }
-            else
-            {
-                $file[0] = "default";
-            }
+	    $file = explode(".", $dir[count($dir)-1]);
 
-            $dir[count($dir)-1] = implode(".", $file);
+            $file[0] = "default";
+	    
+	    $dir[count($dir)-1] = implode(".", $file);
             
             if(file_exists($base.implode("/", $tmp)))
             {
