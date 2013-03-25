@@ -13,9 +13,17 @@ class DefaultController extends Controller
     public function indexAction($type)
     {
         $content = $this->getContentByType($type);
-        $creator = $this->creatorAction($type)->getContent();
+	
+	if($content)
+	{
+		$creator = $this->creatorAction($type)->getContent();
 
-        return $this->render('CrisoCollaContentBundle::index.html.twig', array('content' => $content, 'creator' => $creator));
+        	return $this->render('CrisoCollaContentBundle::index.html.twig', array('content' => $content, 'creator' => $creator));
+	}
+	else
+	{
+		return $this->render('CrisoCollaThemeBundle::error.html.twig', array('path' => $type));
+	}
     }
 
     public function creatorAction($type)

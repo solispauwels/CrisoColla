@@ -2,15 +2,11 @@
 <html>
 	<head>
 		<title>{{ title }}</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		{% stylesheets debug=false filter='lessphp' output='themes/Default/style.css' 
-			'../vendor/twitter/bootstrap/less/bootstrap.less'
-			'@CrisoCollaThemeBundle/Resources/views/Default/style.less'
-			%}
-	
-			<link href="{{ asset('themes/Default/style.css') }}" rel="stylesheet" media="screen" />-->
-			
-		{% endstylesheets %}	
+			'@CrisoCollaThemeBundle/Resources/views/Default/common.less'
+		%}<link href="{{ asset('themes/Default/style.css') }}" rel="stylesheet" media="screen">
+		{% endstylesheets %}
 	</head>
 	<body>
 		<div class="navbar navbar-fixed-top">
@@ -33,40 +29,29 @@
 			</div>
 		</div>
 
-
-		<div class="container wrap">
-
+		<div class="wrap">
 			<div id="push"></div>
-			
-			<div class="container-fluid">
+			<div class="container-fluid container">
+									
 				<div class="row-fluid">
 					{% if left is defined %}
 					<div class="span2">
-
 						{{ left | raw }} 
-
 					</div>
 					{% endif %}
 
 					<div class="{% if left is defined and right is defined %}span8{% elseif left is defined or rigth is defined %}span10{% else %}span12{% endif %}">
-
 						{{ content | raw}}
-
 					</div>
 
 					{% if left is defined %}
 					<div class="span2">
-
 						{{ right | raw }} 
-
 					</div>
 					{% endif %}
 				</div>
 			</div>
-
-				
 		</div>
-
 
 		<div id="footer">
 			<div class="container">
