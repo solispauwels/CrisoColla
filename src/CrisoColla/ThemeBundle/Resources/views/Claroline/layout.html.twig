@@ -3,12 +3,13 @@
 	<head>
 		<title>{{ title }}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<!-- Bootstrap 
-		<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" media="screen" />
-		<link href="{{ asset('themes/'~ theme ~'/style.css') }}" rel="stylesheet" media="screen" />-->
-		{% stylesheets debug=false filter='lessphp' output='themes/'~ theme ~'/style.css' 
-			'@CrisoCollaThemeBundle/Resources/views/'~ theme ~'/style.less' 
-		%}
+		{% stylesheets debug=false filter='lessphp' output='themes/Claroline/style.css' 
+			'../vendor/twitter/bootstrap/less/bootstrap.less'
+			'@CrisoCollaThemeBundle/Resources/views/Claroline/style.less'
+			%}
+	
+			<link href="{{ asset('themes/Claroline/style.css') }}" rel="stylesheet" media="screen" />-->
+			
 		{% endstylesheets %}	
 	</head>
 	<body>
