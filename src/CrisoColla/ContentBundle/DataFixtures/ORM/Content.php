@@ -13,7 +13,7 @@ class Contents extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        $fixtures = array('Test1', 'Test2', 'Test2', 'Test3');
+        $fixtures = array('Test1', 'Test2', 'Test3', 'Test4');
 
         $type = $manager->getRepository("CrisoCollaContentBundle:Type")->findOneBy(array('name' => 'home'));
 

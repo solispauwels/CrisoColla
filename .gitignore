@@ -3,3 +3,4 @@ app/logs/*
 vendor/*
 web/bundles/*
 web/themes/*
+web/vendor/*

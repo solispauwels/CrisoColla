@@ -1,10 +1,12 @@
 {% if content != null %}
 
-<div class="border {{ size }}">
-
-    <h3>{{ content.title }}</h3>
-    <p>{{ content.content }}</p>
-    <i>{{ content.created|date('d/m/Y') }}</i>
+<div class="border {{ size }}" style="position:relative">
+    {{ menu | raw }}
+    <div class="margin">
+        <h3 class="sub-section-header">{{ content.title }}</h3>
+        <p>{{ content.content }}</p>
+        <i>{{ content.created|date('d/m/Y') }}</i>
+    </div>
 
 </div>
 
