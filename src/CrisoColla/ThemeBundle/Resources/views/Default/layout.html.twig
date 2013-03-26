@@ -1,67 +1,116 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>{{ title }}</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		{% stylesheets debug=false filter='lessphp' output='themes/Default/style.css' 
-			'@CrisoCollaThemeBundle/Resources/views/Default/common.less'
-		%}<link href="{{ asset('themes/Default/style.css') }}" rel="stylesheet" media="screen">
-		{% endstylesheets %}
-	</head>
-	<body>
-		<div class="navbar navbar-fixed-top">
+    <head>
+        {% block headtitle %}
+            <title>{{ title }}</title>
+        {% endblock %}
+        {% block bootstrap %}
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            
+            {% stylesheets debug=false filter='lessphp' output='themes/Default/style.css' 
+            '@CrisoCollaThemeBundle/Resources/views/Default/common.less'
+            %}<link href="{{ asset('themes/Default/style.css') }}" rel="stylesheet" media="screen">
+            {% endstylesheets %}
+        {% endblock %}
 
-			<div class="navbar-inner">
+        {% block fontawesome %}        
+            {% stylesheets debug=false filter='lessphp'  output='/vendor/fortawesome/fontawesome/css/font-awesome.css'
+            '../vendor/fortawesome/fontawesome/less/font-awesome.less'  
+            %}<link rel="stylesheet" href="{{ asset('vendor/fortawesome/fontawesome/css/font-awesome.css') }}" screen="media" />
+            {% endstylesheets %}
+            {% image debug=false output='/vendor/fortawesome/fontawesome/font/FontAwesome.otf' '../vendor/fortawesome/fontawesome/font/FontAwesome.otf' %}{% endimage %}
+            {% image debug=false output='/vendor/fortawesome/fontawesome/font/fontawesome-webfont.eot' '../vendor/fortawesome/fontawesome/font/fontawesome-webfont.eot' %}{% endimage %}
+            {% image debug=false output='/vendor/fortawesome/fontawesome/font/fontawesome-webfont.svg' '../vendor/fortawesome/fontawesome/font/fontawesome-webfont.svg' %}{% endimage %}
+            {% image debug=false output='/vendor/fortawesome/fontawesome/font/fontawesome-webfont.ttf' '../vendor/fortawesome/fontawesome/font/fontawesome-webfont.ttf' %}{% endimage %}
+            {% image debug=false output='/vendor/fortawesome/fontawesome/font/fontawesome-webfont.woff' '../vendor/fortawesome/fontawesome/font/fontawesome-webfont.woff' %}{% endimage %}
+        {% endblock %}
+    </head>
+    <body>
+        {% block header %}
+        <div class="navbar navbar-fixed-top">
 
-				<div class="container">
-					<a class="brand" href="#">{{ title }}</a>
+            <div class="navbar-inner">
 
-					{% if header is defined %}
-					{{ header }}
-					{% endif %}
+                <div class="container">
+                    <a class="brand" href="#">{{ title }}</a>
 
-					<ul class="nav pull-right">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#">Link</a></li>
-					<li><a href="#">Link</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
+                    {% if header is defined %}
+                        {{ header }}
+                    {% endif %}
 
-		<div class="wrap">
-			<div id="push"></div>
-			<div class="container-fluid container">
-									
-				<div class="row-fluid">
-					{% if left is defined %}
-					<div class="span2">
-						{{ left | raw }} 
-					</div>
-					{% endif %}
+                    <ul class="nav pull-right">
+                        <li class="active"><a href="#">Home</a></li>
+                        <li><a href="#">Link</a></li>
+                        <li><a href="#">Link</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
 
-					<div class="{% if left is defined and right is defined %}span8{% elseif left is defined or rigth is defined %}span10{% else %}span12{% endif %}">
-						{{ content | raw}}
-					</div>
+        <div class="wrap">
+            <div id="push"></div>
+            <div class="container-fluid container">
 
-					{% if left is defined %}
-					<div class="span2">
-						{{ right | raw }} 
-					</div>
-					{% endif %}
-				</div>
-			</div>
-		</div>
+                <div class="row-fluid">
+                    {% block left %}
+                        {% if left is defined %}
+                        <div class="span2">
+                            {{ left | raw }} 
+                        </div>
+                        {% endif %}
+                    {% endblock %}
 
-		<div id="footer">
-			<div class="container">
-			{% if footer is defined %}
-			{{ footer }} 
-			{% endif %}
-			</div>
-		</div>
+                    {% block content %}
+                        <div class="{% if left is defined and right is defined %}span8{% elseif left is defined or rigth is defined %}span10{% else %}span12{% endif %}">
+                            {{ content | raw}}
+                        </div>
+                    {% endblock %}
 
-		<script src="http://code.jquery.com/jquery.js"></script>
-		<script src="{{ asset('js/bootstrap.min.js') }}"></script>
-	</body>
+                    {% block rigth %}
+                        {% if left is defined %}
+                        <div class="span2">
+                            {{ right | raw }} 
+                        </div>
+                        {% endif %}
+                    {% endblock %}
+
+                </div>
+            </div>
+        </div>
+
+        {% block footer %}
+        <div id="footer">
+            <div class="container">
+                {% if footer is defined %}
+                {{ footer }} 
+                {% endif %}
+            </div>
+        </div>
+        {% endblock %}
+
+        {% block scriptfooter %}
+
+        <script src="http://code.jquery.com/jquery.js"></script>
+        {% javascripts debug=false  output='vendor/twitter/bootstrap/bootstrap.js'
+        '../vendor/twitter/bootstrap/js/bootstrap-affix.js'
+        '../vendor/twitter/bootstrap/js/bootstrap-alert.js'
+        '../vendor/twitter/bootstrap/js/bootstrap-button.js'
+        '../vendor/twitter/bootstrap/js/bootstrap-carousel.js'
+        '../vendor/twitter/bootstrap/js/bootstrap-collapse.js'
+        '../vendor/twitter/bootstrap/js/bootstrap-dropdown.js'
+        '../vendor/twitter/bootstrap/js/bootstrap-modal.js'
+        '../vendor/twitter/bootstrap/js/bootstrap-scrollspy.js'
+        '../vendor/twitter/bootstrap/js/bootstrap-tab.js'
+        '../vendor/twitter/bootstrap/js/bootstrap-tooltip.js'
+        '../vendor/twitter/bootstrap/js/bootstrap-popover.js'
+        '../vendor/twitter/bootstrap/js/bootstrap-transition.js'
+        '../vendor/twitter/bootstrap/js/bootstrap-typeahead.js'
+        %}<script type="text/javascript" src="{{ asset('vendor/twitter/bootstrap/bootstrap.js') }}"></script>
+        {% endjavascripts %}
+
+        {% endblock %}
+
+    </body>
 </html>
+

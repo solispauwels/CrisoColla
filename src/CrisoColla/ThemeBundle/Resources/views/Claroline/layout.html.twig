@@ -1,70 +1,37 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>{{ title }}</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		{% stylesheets debug=false filter='lessphp' output='themes/Claroline/style.css' 
-			'@CrisoCollaThemeBundle/Resources/views/Claroline/common.less'
-		%}<link href="{{ asset('themes/Claroline/style.css') }}" rel="stylesheet" media="screen">
-		{% endstylesheets %}
-	</head>
-	<body>
-		<div class="navbar navbar-inverse navbar-fixed-top">
+{% extends "CrisoCollaThemeBundle:Default:layout.html.twig" %}
+{% block bootstrap %}
 
-			<div class="navbar-inner">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% stylesheets debug=false filter='lessphp' output='themes/Claroline/style.css' 
+'@CrisoCollaThemeBundle/Resources/views/Claroline/common.less'
+%}<link href="{{ asset('themes/Claroline/style.css') }}" rel="stylesheet" media="screen">
+{% endstylesheets %}
 
-				<div class="container">
-					<a class="brand" href="#">{{ title }}</a>
+{% endblock %}
 
-					{% if header is defined %}
-					{{ header }}
-					{% endif %}
+{% block header %}
 
-					<ul class="nav pull-right">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#">Link</a></li>
-					<li><a href="#">Link</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
+<div class="navbar navbar-inverse navbar-fixed-top">
 
-		<div class="wrap">
-			<div id="push"></div>
-			<div class="container-fluid container">
-									
-				<div class="row-fluid">
-					{% if left is defined %}
-					<div class="span2">
-						{{ left | raw }} 
-					</div>
-					{% endif %}
+    <div class="navbar-inner">
 
-					<div class="{% if left is defined and right is defined %}span8{% elseif left is defined or rigth is defined %}span10{% else %}span12{% endif %}">
-						{{ content | raw}}
-					</div>
+        <div class="container">
+            <a class="brand" href="#">{{ title }}</a>
 
-					{% if left is defined %}
-					<div class="span2">
-						{{ right | raw }} 
-					</div>
-					{% endif %}
-				</div>
-			</div>
-		</div>
+            {% if header is defined %}
+            {{ header }}
+            {% endif %}
 
-		<div id="footer">
-			<div class="container">
-			{% if footer is defined %}
-			{{ footer }} 
-			{% endif %}
-			</div>
-		</div>
+            <ul class="nav pull-right">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#">Link</a></li>
+                <li><a href="#">Link</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
 
-		<script src="http://code.jquery.com/jquery.js"></script>
-        {% javascripts debug=false  output='vendor/twitter/bootstrap/bootstrap.js'
-            '../vendor/twitter/bootstrap/js/*'
-        %}<script type="text/javascript" src="{{ asset('vendor/twitter/bootstrap/bootstrap.js') }}"></script>
-        {% endjavascripts %}
-	</body>
-</html>
+{% endblock %}
+
+
+
