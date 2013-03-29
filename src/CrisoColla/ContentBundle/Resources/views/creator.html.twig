@@ -1,13 +1,25 @@
-<div class="row-fluid">
-	<input type="text" placeholder="{{ 'Create'~" "~"a content" | trans({}, 'content') }}..." class="span12">
-	<div class="label span12">
-		sd
-	</div>
-	<a class="btn">{{ 'Create' | trans({}, 'content') }}</a> 
+<div class="creator">
+    <div class="content row-fluid">
+        <div class="border span12">
+            <input type="text" placeholder="{{ "Optional title" | trans({}, 'content') }}..." class="content-title">
+        </div>
+    </div>
+    <div class=" content row-fluid">
+        <div class="border span12">
+            <textarea class="content-text" placeholder="{{ "Create" | trans({}, 'content') }} {{ "a content" | trans({}, 'content') }}..."></textarea>
 
-	<div class="navbar navbar-static-bottom">
-		
-	</div>
-
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <ul class="nav">
+                        <li><a href="#"><i class="icon-picture"></i> {{ "Add Pictures" | trans({}, 'content') }}</a></li>
+                        <li><a href="#"><i class="icon-paper-clip"></i> {{ "Add Files" | trans({}, 'content') }}</a></li>
+                        <li class="divider-vertical"></li>
+                    </ul>    
+                    <ul class="nav pull-right">
+                        <li><div><a class="creator-button btn btn-primary">{{ 'Create' | trans({}, 'content') }}</a></div></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-

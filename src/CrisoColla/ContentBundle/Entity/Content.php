@@ -150,8 +150,15 @@ class Content
      */
     public function setModified($modified)
     {
-        $this->modified = $modified;
-    
+        if($modified)
+        {
+            $this->modified = $modified;
+        }
+        else
+        {
+            $this->modified = new \Datetime();
+        }
+
         return $this;
     }
 

@@ -1,3 +1,21 @@
-criso_colla_content_homepage:
+criso_colla_content_create:
+    pattern:  /content/create
+    defaults: { _controller: CrisoCollaContentBundle:Content:create }
+
+criso_colla_content_update_by_id:
+    pattern:  /content/update/{id}
+    defaults: { _controller: CrisoCollaContentBundle:Content:update }
+
+criso_colla_content_get_by_id:
+    pattern:  /content/{id}
+    defaults: { _controller: CrisoCollaContentBundle:Content:content }
+
+criso_colla_content_get_by_type:
     pattern:  /{type}
-    defaults: { _controller: CrisoCollaContentBundle:Content:index }
+    defaults: { _controller: CrisoCollaContentBundle:Content:type }
+
+criso_colla_content_get_by_id_and_type:
+    pattern:  /content/{id}/{type}
+    defaults: { _controller: CrisoCollaContentBundle:Content:content }
+
+

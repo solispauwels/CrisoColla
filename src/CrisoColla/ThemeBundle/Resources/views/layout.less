@@ -128,7 +128,7 @@ body
 
     .content.row-fluid .span8
 	{
-		width:65,66%;
+		width:65.66%;
 	}
 
     .content.row-fluid .span9
@@ -158,17 +158,38 @@ body
 	}
 }
 
+.content-element
+{
+    -webkit-animation: fadein 2s 0s 1 alternate ease-in-out;
+	-moz-animation: fadein 2s 0s 1 alternate ease-in-out;
+	-ms-animation: fadein 2s 0s 1 alternate ease-in-out;
+	-o-animation: fadein 2s 0s 1 alternate ease-in-out;
+	animation: fadein 2s 0s 1 alternate ease-in-out;
+}
+
+.content-size.dropdown-menu, .content-size.dropdown-menu li
+{
+    width:50px !important;
+    min-width:50px !important;
+    max-width:50px !important;
+}
+
+.content-size.dropdown-menu
+{
+    left:-35% !important;
+}
+
+.content-size.dropdown-menu li a
+{
+}
+
 /** Custom **/
 
 .border {
 	border:1px solid #ddd;
-	.border-radius( 5px );
 	margin-bottom:10px;
-}
-
-.content .border
-{
 	background-color:@white;
+	.border-radius( 5px );
 	.box-shadow(0 1px 10px rgba(0,0,0,.2));
 }
 
@@ -176,3 +197,65 @@ body
 {
     margin:0 10px 10px 10px;
 }
+
+.float-right-top
+{
+    position:absolute;
+    right:5px;
+    top:5px
+}
+
+.relative
+{
+    position:relative;
+}
+
+.content-title, .content-text
+{
+    border:0 !important;
+    margin:0 !important;
+    width:99%;
+    max-width:99%;
+}
+
+.creator .navbar
+{
+    border-top:1px solid darken(@grayLighter, 5%);
+}
+
+.creator textarea
+{
+    overflow:hidden;
+    .transition(all .2s linear);
+}
+
+#sizes a.border
+{
+    cursor:pointer;
+    padding:5px;
+}
+
+#sizes a.border:hover, #sizes a.border.active
+{
+    background:@linkColor;
+    color:@white;
+    text-decoration:none;
+}
+
+.align-right
+{
+    text-align:right;
+}
+
+
+
+/** ----------- CSS3 ----------------- **/
+
+@keyframes fadein
+{
+	0%{ opacity:0; }
+	50%, 100%{ opacity:1; }
+}
+
+
+

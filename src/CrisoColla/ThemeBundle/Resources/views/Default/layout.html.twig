@@ -26,6 +26,7 @@
         {% endblock %}
     </head>
     <body>
+        <div id="asset" class="hide">{{ asset("") }}</div>
         {% block header %}
         <div class="navbar navbar-fixed-top">
 
@@ -106,9 +107,9 @@
         '../vendor/twitter/bootstrap/js/bootstrap-popover.js'
         '../vendor/twitter/bootstrap/js/bootstrap-transition.js'
         '../vendor/twitter/bootstrap/js/bootstrap-typeahead.js'
-        %}<script type="text/javascript" src="{{ asset('vendor/twitter/bootstrap/bootstrap.js') }}"></script>
+        %}<script src="{{ asset('vendor/twitter/bootstrap/bootstrap.js') }}"></script>
         {% endjavascripts %}
-
+        <script src="{{ asset('bundles/crisocollacontent/js/content.js') }}"></script>
         {% endblock %}
 
     </body>
