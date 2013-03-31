@@ -39,7 +39,7 @@ class ContentController extends Controller
         if($content)
         {
             $creator = $this->creatorAction($type)->getContent();
-            
+
             $sizes = $this->render('CrisoCollaContentBundle::sizes.html.twig')->getContent();
 
             return $this->render('CrisoCollaContentBundle::layout.html.twig', array('content' => $content, 'creator' => $creator, 'sizes' => $sizes));
@@ -134,7 +134,7 @@ class ContentController extends Controller
 
                 $manager->persist($content);
                 $manager->flush();
-    
+
                 $response = "true";
             }
         }

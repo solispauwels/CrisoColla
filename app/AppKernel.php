@@ -21,7 +21,6 @@ class AppKernel extends Kernel
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new CrisoColla\ThemeBundle\CrisoCollaThemeBundle(),
-            new CrisoColla\TestBundle\CrisoCollaTestBundle(),
             new CrisoColla\ContentBundle\CrisoCollaContentBundle(),
         );
 

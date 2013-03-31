@@ -7,7 +7,7 @@
             <h3 class="sub-section-header">{{ content.title }}</h3>
         {% endif %}
         <p>{{ content.content | nl2br}}</p>
-        <i>{{ content.created|date('d/m/Y') }}</i>
+        <i>{{ content.created | timeAgo }}</i>
     </div>
 
 </div>
