@@ -5,3 +5,6 @@ services:
 #    criso_colla_theme.example:
 #        class: %criso_colla_theme.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+    criso_colla_theme.theme_service:
+        class: CrisoColla\ThemeBundle\Services\ThemeService
+        arguments: []

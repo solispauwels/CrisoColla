@@ -1,12 +1,12 @@
+'Size of content': 'Taille du contenu'
+Size: Taille
+Edit: Editer
+Delete: Effacer
 'Optional title': 'Titre facultatif'
 Create: Créer
 'a content': 'un contenu'
 'Add Pictures': 'Ajouter des photos'
 'Add Files': 'Ajouter des fichiers'
-Size: Taille
-Edit: Editer
-Delete: Effacer
-'Size of content': 'Taille du contenu'
 '%count% year ago|%count% years ago': 'Il y a %count% an|Il y a %count% ans'
 '%count% month ago|%count% months ago': 'Il y a %count% mois|Il y a %count% mois'
 '%count% week ago|%count% weeks ago': 'Il y a %count% semaine|Il y a %count% semaines'

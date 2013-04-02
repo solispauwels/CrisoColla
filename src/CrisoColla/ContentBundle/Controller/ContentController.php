@@ -10,20 +10,48 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ContentController extends Controller
 {
-    public function contentAction($id, $type="home")
+    /**
+     *  Get content by id, if the content does not exists an error is given.
+     *  This method require criso_colla_theme.theme_service.
+     *
+     * @param \String $id The id of the content.
+     * @param \String $type The type of the content, this parameter is optional, but this parameter could be usefull because the contents can have different twigs templates and sizes by their type.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @see CrisoColla\ThemeBundle\ThemeService()
+     */
+    public function contentAction($id, $type = null)
     {
         //@todo get the types and if the $type is set use this type for twig and their size
 
         $manager = $this->getDoctrine()->getManager();
 
         $content = $manager->getRepository("CrisoCollaContentBundle:Content")->findOneBy(array('id' => $id));
+        
+        if($content)
+        {
+            if($type)
+            {
+                $types = $manager->getRepository("CrisoCollaContentBundle:Type")->findOneBy(array('name' => $type));
+                $content2type = $manager->getRepository("CrisoCollaContentBundle:Content2Type")->findOneBy(array('content' => $content, 'type' => $types));
 
-        if($content){
-            $size = "span12";
+                if($types and $content2type)
+                {
+                    $size = $content2type->getSize();
+                }
+            }
+            else
+            {
+                //default values
 
+                $type = "home"; 
+                $size = "span12";
+            }
+        
             $menu = $this->menuAction($id, $size, $type)->getContent();
 
-            return $this->render('CrisoCollaContentBundle:Default:default.html.twig', 
+            return $this->render(
+                $this->container->get('criso_colla_theme.theme_service')->defaultTemplate("CrisoCollaContentBundle:types:$type.html.twig"), 
                 array('content' => $content, 'size' => $size, 'menu' => $menu));
         }
         else
@@ -32,6 +60,13 @@ class ContentController extends Controller
         }
     }
 
+    /**
+     * Render the layout of contents by type, if the type does not exists an error is given.
+     * 
+     * @param \String $type The type of contents.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function typeAction($type)
     {
         $content = $this->getContentByType($type);
@@ -50,9 +85,15 @@ class ContentController extends Controller
         }
     }
 
+    /**
+     * Create new content by POST method. This is used by ajax.
+     * The response is the id of the new content in success, otherwise the response is the false word in a string. 
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function createAction()
     {
-        $response = "false"; // in a string because this will be printed in a twig
+        $response = "false";
 
         if(isset($_POST['title']) and isset($_POST['text']))
         {
@@ -90,6 +131,14 @@ class ContentController extends Controller
         return new Response($response);
     }
 
+    /**
+     * Update a content by POST method. This is used by ajax.
+     * The response is the word true in a string in success, otherwise false. 
+     *
+     * @param \String $id The id of the content.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function updateAction($id)
     {
         $response = "false";
@@ -142,21 +191,38 @@ class ContentController extends Controller
         return new Response($response);
     }
 
+    /**
+     * Render the HTML of the creator box.
+     *
+     * @param \String $type The type of the content to create.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function creatorAction($type)
     {
         return $this->render('CrisoCollaContentBundle::creator.html.twig', array('type' => $type));
     }
 
+    /**
+     * Render the HTML of the menu in a content.
+     *
+     * @param \String $id The id of the content.
+     * @param \String $size The size (span12) of the content.
+     * @param \String $type The type of the content.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function menuAction($id, $size, $type)
     {
         return $this->render('CrisoCollaContentBundle::menu.html.twig', array('id' => $id, 'size' => $size, 'type' => $type));
     }
 
     /**
-     * Get Content by type
+     * Get Content by type, this method return an array with the content on success or null if the type does not exist.
      *
-     * @param String $type  Name of the type
-     * @return Return an array with the content on success, and null if the type doesn't not exist
+     * @param \String $type  Name of the type.
+     *
+     * @return \Array
      */
     public function getContentByType($type = "home")
     {
@@ -176,8 +242,9 @@ class ContentController extends Controller
                 {
                     $menu = $this->menuAction($first->getContent()->getId(), $first->getSize(), $type->getName())->getContent();
 
-                    //@TODO use the type and not default -- and use a call of the action
-                    $content.= $this->render('CrisoCollaContentBundle:Default:default.html.twig', array('content' => $first->getContent(), 'size' => $first->getSize(), 'menu' => $menu))->getContent();
+                    $content.= $this->render(
+                        $this->container->get('criso_colla_theme.theme_service')->defaultTemplate("CrisoCollaContentBundle:types:".$type->getName().".html.twig"), 
+                        array('content' => $first->getContent(), 'size' => $first->getSize(), 'menu' => $menu))->getContent();
                     $first = $first->getNext();
                 }
 

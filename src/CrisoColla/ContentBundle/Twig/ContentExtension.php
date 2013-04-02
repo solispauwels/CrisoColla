@@ -6,11 +6,22 @@ class ContentExtension extends \Twig_Extension
 {
     protected $translator;
 
+    /**
+     * Get the injected services.
+     *
+     * @param Symfony\Component\Translation\Translator $translator The Translator service.
+     *
+     */
     public function __construct($translator)
     {
         $this->translator = $translator;
     }
         
+    /**
+     * Get filters of the service
+     *
+     * @return \Twig_Filter_Method
+     */
     public function getFilters()
     {
         return array(
@@ -18,6 +29,14 @@ class ContentExtension extends \Twig_Extension
         );
     }
 
+    /**
+     * Get the elapsed time since $start to right now, with a transChoice() for translation in plural or singular.
+     *
+     * @param \DateTime $start The initial time.
+     *
+     * @return \String
+     * @see Symfony\Component\Translation\Translator
+     */
     function timeAgo($start)
     {
         $end = new \DateTime("now");
@@ -53,10 +72,16 @@ class ContentExtension extends \Twig_Extension
         return $this->translator->transChoice(
             "%count% second ago|%count% seconds ago",
             1,
-            array('%count%' => 1)
+            array('%count%' => 1),
+            "content"
         );
     }
 
+    /**
+     * Get the name of the twig extention.
+     *
+     * @return \String
+     */
     public function getName()
     {
         return 'content_extension';
