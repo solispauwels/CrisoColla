@@ -2,13 +2,35 @@ criso_colla_content_create:
     pattern:  /content/create
     defaults: { _controller: CrisoCollaContentBundle:Content:create }
 
+criso_colla_content_creator:
+    pattern:  /content/creator/{type}/{id}
+    defaults: { _controller: CrisoCollaContentBundle:Content:creator }
+    requirements:
+        id: \d+
+
 criso_colla_content_update_by_id:
     pattern:  /content/update/{id}
     defaults: { _controller: CrisoCollaContentBundle:Content:update }
+    requirements:
+        id: \d+
+
+criso_colla_content_delete_by_id:
+    pattern:  /content/delete/{id}
+    defaults: { _controller: CrisoCollaContentBundle:Content:delete }
+    requirements:
+        id: \d+
+
+criso_colla_content_reorder:
+    pattern:  /content/reorder/{type}/{a}/{b}
+    defaults: { _controller: CrisoCollaContentBundle:Content:reorder }
+    requirements:
+        a: \d+
 
 criso_colla_content_get_by_id:
     pattern:  /content/{id}
     defaults: { _controller: CrisoCollaContentBundle:Content:content }
+    requirements:
+        id: \d+
 
 criso_colla_content_get_by_type:
     pattern:  /{type}
@@ -17,5 +39,24 @@ criso_colla_content_get_by_type:
 criso_colla_content_get_by_id_and_type:
     pattern:  /content/{id}/{type}
     defaults: { _controller: CrisoCollaContentBundle:Content:content }
+    requirements:
+        id: \d+
 
+criso_colla_content_error:
+    pattern: /content/error
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template: 'CrisoCollaContentBundle::error.html.twig'
+
+criso_colla_content_confirm:
+    pattern: /content/confirm
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template: 'CrisoCollaContentBundle::confirm.html.twig'
+
+criso_colla_content_sizes:
+    pattern: /content/size/{id}/{size}/{type}
+    defaults: { _controller: CrisoCollaContentBundle:Content:size }
+    requirements:
+        id: \d+
 

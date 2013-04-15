@@ -70,7 +70,7 @@ class Content2Type
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -86,14 +86,14 @@ class Content2Type
     public function setSize($size)
     {
         $this->size = $size;
-    
+
         return $this;
     }
 
     /**
      * Get size
      *
-     * @return string 
+     * @return string
      */
     public function getSize()
     {
@@ -109,14 +109,14 @@ class Content2Type
     public function setContent(\CrisoColla\ContentBundle\Entity\Content $content)
     {
         $this->content = $content;
-    
+
         return $this;
     }
 
     /**
      * Get content
      *
-     * @return \CrisoColla\ContentBundle\Entity\Content 
+     * @return \CrisoColla\ContentBundle\Entity\Content
      */
     public function getContent()
     {
@@ -132,14 +132,14 @@ class Content2Type
     public function setType(\CrisoColla\ContentBundle\Entity\Type $type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
     /**
      * Get type
      *
-     * @return \CrisoColla\ContentBundle\Entity\Type 
+     * @return \CrisoColla\ContentBundle\Entity\Type
      */
     public function getType()
     {
@@ -152,17 +152,17 @@ class Content2Type
      * @param \CrisoColla\ContentBundle\Entity\Content2Type $next
      * @return Content2Type
      */
-    public function setNext(\CrisoColla\ContentBundle\Entity\Content2Type $next)
+    public function setNext($next)
     {
         $this->next = $next;
-    
+
         return $this;
     }
 
     /**
      * Get next
      *
-     * @return \CrisoColla\ContentBundle\Entity\Content2Type 
+     * @return \CrisoColla\ContentBundle\Entity\Content2Type
      */
     public function getNext()
     {
@@ -173,22 +173,38 @@ class Content2Type
      * Set back
      *
      * @param \CrisoColla\ContentBundle\Entity\Content2Type $back
-     * @return Content2Type
+     * @return \CrisoColla\ContentBundle\Entity\Content2Type
      */
-    public function setBack(\CrisoColla\ContentBundle\Entity\Content2Type $back)
+    public function setBack($back)
     {
         $this->back = $back;
-    
+
         return $this;
     }
 
     /**
      * Get back
      *
-     * @return \CrisoColla\ContentBundle\Entity\Content2Type 
+     * @return \CrisoColla\ContentBundle\Entity\Content2Type
      */
     public function getBack()
     {
         return $this->back;
+    }
+
+    /**
+     * Detach a content from a type, this function can be used for reorder or delete contents.
+     */
+    public function detach()
+    {
+        if($this->getBack())
+        {
+            $this->getBack()->setNext($this->getNext());
+        }
+
+        if($this->getNext())
+        {
+            $this->getNext()->setBack($this->getBack());
+        }
     }
 }

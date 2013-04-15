@@ -6,16 +6,16 @@
         {% endblock %}
         {% block bootstrap %}
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            
-            {% stylesheets debug=false filter='lessphp' output='themes/Default/style.css' 
+
+            {% stylesheets debug=false filter='lessphp' output='themes/Default/style.css'
             '@CrisoCollaThemeBundle/Resources/views/Default/common.less'
             %}<link href="{{ asset('themes/Default/style.css') }}" rel="stylesheet" media="screen">
             {% endstylesheets %}
         {% endblock %}
 
-        {% block fontawesome %}        
+        {% block fontawesome %}
             {% stylesheets debug=false filter='lessphp'  output='/vendor/fortawesome/fontawesome/css/font-awesome.css'
-            '../vendor/fortawesome/fontawesome/less/font-awesome.less'  
+            '../vendor/fortawesome/fontawesome/less/font-awesome.less'
             %}<link rel="stylesheet" href="{{ asset('vendor/fortawesome/fontawesome/css/font-awesome.css') }}" screen="media" />
             {% endstylesheets %}
             {% image debug=false output='/vendor/fortawesome/fontawesome/font/FontAwesome.otf' '../vendor/fortawesome/fontawesome/font/FontAwesome.otf' %}{% endimage %}
@@ -51,13 +51,13 @@
 
         <div class="wrap">
             <div id="push"></div>
-            <div class="container-fluid container">
+            <div class="container container-fluid">
 
                 <div class="row-fluid">
                     {% block left %}
                         {% if left is defined %}
                         <div class="span2">
-                            {{ left | raw }} 
+                            {{ left | raw }}
                         </div>
                         {% endif %}
                     {% endblock %}
@@ -71,7 +71,7 @@
                     {% block rigth %}
                         {% if left is defined %}
                         <div class="span2">
-                            {{ right | raw }} 
+                            {{ right | raw }}
                         </div>
                         {% endif %}
                     {% endblock %}
@@ -84,7 +84,7 @@
         <div id="footer">
             <div class="container">
                 {% if footer is defined %}
-                {{ footer }} 
+                {{ footer }}
                 {% endif %}
             </div>
         </div>
@@ -93,6 +93,7 @@
         {% block scriptfooter %}
 
         <script src="http://code.jquery.com/jquery.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.min.js"></script>
         {% javascripts debug=false  output='vendor/twitter/bootstrap/bootstrap.js'
         '../vendor/twitter/bootstrap/js/bootstrap-affix.js'
         '../vendor/twitter/bootstrap/js/bootstrap-alert.js'

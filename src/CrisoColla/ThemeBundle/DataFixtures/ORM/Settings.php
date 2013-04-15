@@ -14,7 +14,7 @@ class Settings implements FixtureInterface
         $Setting->setCompanyName("Claroline");
         $Setting->setEmail("jorgeluissolis@gmail.com");
         $Setting->setBrief("CrisoColla CMS");
-        $Setting->setTheme("claroline");
+        $Setting->setTheme("Claroline");
         $Setting->setLang("en");
         $Setting->setHome("home");
 

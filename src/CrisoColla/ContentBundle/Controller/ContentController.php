@@ -27,7 +27,7 @@ class ContentController extends Controller
         $manager = $this->getDoctrine()->getManager();
 
         $content = $manager->getRepository("CrisoCollaContentBundle:Content")->findOneBy(array('id' => $id));
-        
+
         if($content)
         {
             if($type)
@@ -44,15 +44,15 @@ class ContentController extends Controller
             {
                 //default values
 
-                $type = "home"; 
+                $type = "default";
                 $size = "span12";
             }
-        
+
             $menu = $this->menuAction($id, $size, $type)->getContent();
 
             return $this->render(
-                $this->container->get('criso_colla_theme.theme_service')->defaultTemplate("CrisoCollaContentBundle:types:$type.html.twig"), 
-                array('content' => $content, 'size' => $size, 'menu' => $menu));
+                $this->container->get('criso_colla_theme.theme_service')->defaultTemplate("CrisoCollaContentBundle:types:$type.html.twig"),
+                array('content' => $content, 'size' => $size, 'menu' => $menu, 'type' => $type));
         }
         else
         {
@@ -62,7 +62,7 @@ class ContentController extends Controller
 
     /**
      * Render the layout of contents by type, if the type does not exists an error is given.
-     * 
+     *
      * @param \String $type The type of contents.
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -75,9 +75,7 @@ class ContentController extends Controller
         {
             $creator = $this->creatorAction($type)->getContent();
 
-            $sizes = $this->render('CrisoCollaContentBundle::sizes.html.twig')->getContent();
-
-            return $this->render('CrisoCollaContentBundle::layout.html.twig', array('content' => $content, 'creator' => $creator, 'sizes' => $sizes));
+            return $this->render('CrisoCollaContentBundle::layout.html.twig', array('content' => $content, 'creator' => $creator));
         }
         else
         {
@@ -87,7 +85,7 @@ class ContentController extends Controller
 
     /**
      * Create new content by POST method. This is used by ajax.
-     * The response is the id of the new content in success, otherwise the response is the false word in a string. 
+     * The response is the id of the new content in success, otherwise the response is the false word in a string.
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -95,7 +93,7 @@ class ContentController extends Controller
     {
         $response = "false";
 
-        if(isset($_POST['title']) and isset($_POST['text']))
+        if(isset($_POST['title']) and isset($_POST['text']) and isset($_POST['type']))
         {
             $title =  $_POST['title'];
             $text =  $_POST['text'];
@@ -109,7 +107,7 @@ class ContentController extends Controller
 
             $manager->persist($content);
 
-            $type = $manager->getRepository("CrisoCollaContentBundle:Type")->findOneBy(array('name' => 'home'));
+            $type = $manager->getRepository("CrisoCollaContentBundle:Type")->findOneBy(array('name' => $_POST['type']));
 
             if($type)
             {
@@ -133,7 +131,7 @@ class ContentController extends Controller
 
     /**
      * Update a content by POST method. This is used by ajax.
-     * The response is the word true in a string in success, otherwise false. 
+     * The response is the word true in a string in success, otherwise false.
      *
      * @param \String $id The id of the content.
      *
@@ -192,15 +190,127 @@ class ContentController extends Controller
     }
 
     /**
+     * Reorder contents in types. This method is used by ajax.
+     * The response is the word true in a string in success, otherwise false.
+     *
+     * @param \String $type The type of the content.
+     * @param \String $a The id of the content 1.
+     * @param \String $b The id of the content 2.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function reorderAction($type, $a, $b)
+    {
+        $response = "false";
+
+        $manager = $this->getDoctrine()->getManager();
+
+        $a = $manager->getRepository("CrisoCollaContentBundle:Content")->find($a);
+        $b = $manager->getRepository("CrisoCollaContentBundle:Content")->find($b);
+
+        $type = $manager->getRepository("CrisoCollaContentBundle:Type")->findOneBy(array('name' => $type));
+
+        if($a and $type)
+        {
+            $a = $manager->getRepository("CrisoCollaContentBundle:Content2Type")->findOneBy(array('type' => $type, 'content' => $a));
+
+            $a->detach();
+
+            if($b)
+            {
+                $b = $manager->getRepository("CrisoCollaContentBundle:Content2Type")->findOneBy(array('type' => $type, 'content' => $b ));
+
+                $a->setBack($b->getBack());
+                $a->setNext($b);
+
+                if($b->getBack())
+                {
+                    $b->getBack()->setNext($a);
+                }
+
+                $b->setBack($a);
+            }
+            else
+            {
+                $b = $manager->getRepository("CrisoCollaContentBundle:Content2Type")->findOneBy(array('type' => $type, 'next' => null));
+
+                $a->setNext($b->getNext());
+                $a->setBack($b);
+
+                $b->setNext($a);
+            }
+
+            $manager->persist($a);
+            $manager->persist($b);
+
+            $manager->flush();
+
+            $response = "true";
+        }
+
+        return new Response($response);
+    }
+
+    /**
+     * Delete a content by POST method. This is used by ajax.
+     * The response is the word true in a string in success, otherwise false.
+     *
+     * @param \String $id The id of the content.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function deleteAction($id)
+    {
+        $response = "false";
+
+        $manager = $this->getDoctrine()->getManager();
+
+        $content = $manager->getRepository("CrisoCollaContentBundle:Content")->find($id);
+
+        if($content)
+        {
+            $content2types = $manager->getRepository("CrisoCollaContentBundle:Content2Type")->findBy(array('content' => $content));
+
+            foreach($content2types as $content2type)
+            {
+                $content2type->detach();
+
+                $manager->remove($content2type);
+            }
+
+            $manager->remove($content);
+            $manager->flush();
+
+            $response = "true";
+        }
+
+        return new Response($response);
+    }
+
+    /**
      * Render the HTML of the creator box.
      *
      * @param \String $type The type of the content to create.
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function creatorAction($type)
+    public function creatorAction($type, $id = null, $content = null)
     {
-        return $this->render('CrisoCollaContentBundle::creator.html.twig', array('type' => $type));
+        if($id and !$content)
+        {
+            $manager = $this->getDoctrine()->getManager();
+
+            $content =  $manager->getRepository("CrisoCollaContentBundle:Content")->find($id);
+        }
+
+        if($content)
+        {
+            return $this->render('CrisoCollaContentBundle::creator.html.twig', array('content' => $content, 'type' => $type));
+        }
+        else
+        {
+            return $this->render('CrisoCollaContentBundle::creator.html.twig', array('type' => $type));
+        }
     }
 
     /**
@@ -215,6 +325,20 @@ class ContentController extends Controller
     public function menuAction($id, $size, $type)
     {
         return $this->render('CrisoCollaContentBundle::menu.html.twig', array('id' => $id, 'size' => $size, 'type' => $type));
+    }
+
+    /**
+     * Render the HTML of the menu of sizes of the contents.
+     *
+     * @param \String $id The id of the content.
+     * @param \String $size The size (span12) of the content.
+     * @param \String $type The type of the content.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function sizeAction($id, $size, $type)
+    {
+        return $this->render('CrisoCollaContentBundle::sizes.html.twig', array('id' => $id, 'size' => $size, 'type' => $type));
     }
 
     /**
@@ -243,13 +367,18 @@ class ContentController extends Controller
                     $menu = $this->menuAction($first->getContent()->getId(), $first->getSize(), $type->getName())->getContent();
 
                     $content.= $this->render(
-                        $this->container->get('criso_colla_theme.theme_service')->defaultTemplate("CrisoCollaContentBundle:types:".$type->getName().".html.twig"), 
-                        array('content' => $first->getContent(), 'size' => $first->getSize(), 'menu' => $menu))->getContent();
+                        $this->container->get('criso_colla_theme.theme_service')->defaultTemplate("CrisoCollaContentBundle:types:".$type->getName().".html.twig"),
+                        array('content' => $first->getContent(), 'size' => $first->getSize(), 'menu' => $menu, 'type' => $type->getName()))->getContent();
                     $first = $first->getNext();
                 }
 
                 return $content;
-            }  
+            }
+            else
+            {
+                return " "; // Not yet content
+            }
+
         }
 
         return null;
