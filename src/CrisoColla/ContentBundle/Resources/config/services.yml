@@ -5,8 +5,12 @@ services:
 #    criso_colla_content.example:
 #        class: %criso_colla_content.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
-    content.twig.acme_extension:
+    criso_colla_content.twig.content_extension:
         class: CrisoColla\ContentBundle\Twig\ContentExtension
         arguments: [@translator]
         tags:
-            - { name: twig.extension }     
+            - { name: twig.extension }
+
+    criso_colla_content.graph_service:
+        class: CrisoColla\ContentBundle\Services\GraphService
+        arguments: []

@@ -13,8 +13,8 @@ class Types extends AbstractFixture implements OrderedFixtureInterface
     {
         $fixtures = array('home', 'menu', 'users', 'html', 'todo');
 
-        foreach($fixtures as $i => $fixture)
-        {
+        foreach ($fixtures as $i => $fixture) {
+
             $types[$i] = new Type();
             $types[$i]->setName($fixture);
 
@@ -28,5 +28,4 @@ class Types extends AbstractFixture implements OrderedFixtureInterface
     {
         return 1; // the order in which fixtures will be loaded
     }
-    
 }

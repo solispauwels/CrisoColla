@@ -17,27 +17,27 @@ class Contents extends AbstractFixture implements OrderedFixtureInterface
 
         $type = $manager->getRepository("CrisoCollaContentBundle:Type")->findOneBy(array('name' => 'home'));
 
-        if($type)
-        {
-            foreach($fixtures as $i => $fixture)
-            {
+        if ($type) {
+            foreach ($fixtures as $i => $fixture) {
                 $content[$i] = new Content();
                 $content[$i]->setTitle($fixture);
                 $content[$i]->setContent("hello world");
 
-                $first = $manager->getRepository("CrisoCollaContentBundle:Content2Type")->findOneBy(array('back' => null, 'type' => $type));
+                $first = $manager->getRepository("CrisoCollaContentBundle:Content2Type")->findOneBy(
+                    array('back' => null, 'type' => $type)
+                );
 
-                $content2type = new Content2Type($first);
+                $contentType = new Content2Type($first);
 
-                $content2type->setContent($content[$i]);
-                $content2type->setType($type);
+                $contentType->setContent($content[$i]);
+                $contentType->setType($type);
 
-                $manager->persist($content2type);
-                
+                $manager->persist($contentType);
+
                 $manager->persist($content[$i]);
 
                 $manager->flush();
-                
+
             }
         }
     }
@@ -46,5 +46,5 @@ class Contents extends AbstractFixture implements OrderedFixtureInterface
     {
         return 2; // the order in which fixtures will be loaded
     }
-    
+
 }

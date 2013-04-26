@@ -26,7 +26,7 @@ class Setting
      *
      * @ORM\Column(name="company_name", type="string", length=255)
      */
-    private $company_name;
+    private $companyName;
 
     /**
      * @var string
@@ -67,7 +67,7 @@ class Setting
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -82,19 +82,19 @@ class Setting
      */
     public function setCompanyName($companyName)
     {
-        $this->company_name = $companyName;
-    
+        $this->companyName = $companyName;
+
         return $this;
     }
 
     /**
      * Get company_name
      *
-     * @return string 
+     * @return string
      */
     public function getCompanyName()
     {
-        return $this->company_name;
+        return $this->companyName;
     }
 
     /**
@@ -106,14 +106,14 @@ class Setting
     public function setEmail($email)
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -129,14 +129,14 @@ class Setting
     public function setBrief($brief)
     {
         $this->brief = $brief;
-    
+
         return $this;
     }
 
     /**
      * Get brief
      *
-     * @return string 
+     * @return string
      */
     public function getBrief()
     {
@@ -152,14 +152,14 @@ class Setting
     public function setTheme($theme)
     {
         $this->theme = $theme;
-    
+
         return $this;
     }
 
     /**
      * Get theme
      *
-     * @return string 
+     * @return string
      */
     public function getTheme()
     {
@@ -175,14 +175,14 @@ class Setting
     public function setLang($lang)
     {
         $this->lang = $lang;
-    
+
         return $this;
     }
 
     /**
      * Get lang
      *
-     * @return string 
+     * @return string
      */
     public function getLang()
     {
@@ -198,14 +198,14 @@ class Setting
     public function setHome($home)
     {
         $this->home = $home;
-    
+
         return $this;
     }
 
     /**
      * Get home
      *
-     * @return string 
+     * @return string
      */
     public function getHome()
     {

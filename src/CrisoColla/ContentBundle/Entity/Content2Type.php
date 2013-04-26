@@ -16,14 +16,11 @@ class Content2Type
     {
         $this->size = "span12"; //The size may be between 1 and 12 that correspont to span1 ant span12 of bootstrap
 
-        if($first)
-        {
+        if ($first) {
             $first->setBack($this);
             $this->next = $first;
             $this->back = null;
-        }
-        else
-        {
+        } else {
             $this->next = null;
             $this->back = null;
         }
@@ -197,13 +194,11 @@ class Content2Type
      */
     public function detach()
     {
-        if($this->getBack())
-        {
+        if ($this->getBack()) {
             $this->getBack()->setNext($this->getNext());
         }
 
-        if($this->getNext())
-        {
+        if ($this->getNext()) {
             $this->getNext()->setBack($this->getBack());
         }
     }

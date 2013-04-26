@@ -10,15 +10,15 @@ class Settings implements FixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        $Setting = new Setting();
-        $Setting->setCompanyName("Claroline");
-        $Setting->setEmail("jorgeluissolis@gmail.com");
-        $Setting->setBrief("CrisoColla CMS");
-        $Setting->setTheme("Claroline");
-        $Setting->setLang("en");
-        $Setting->setHome("home");
+        $setting = new Setting();
+        $setting->setCompanyName("Claroline");
+        $setting->setEmail("jorgeluissolis@gmail.com");
+        $setting->setBrief("CrisoColla CMS");
+        $setting->setTheme("Claroline");
+        $setting->setLang("en");
+        $setting->setHome("home");
 
-        $manager->persist($Setting);
+        $manager->persist($setting);
 
         $manager->flush();
     }

@@ -60,3 +60,6 @@ criso_colla_content_sizes:
     requirements:
         id: \d+
 
+criso_colla_content_graph:
+    pattern: /content/graph
+    defaults: { _controller: CrisoCollaContentBundle:Content:graph }
