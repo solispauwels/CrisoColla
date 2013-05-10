@@ -2,7 +2,7 @@
 {% block bootstrap %}
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-{% stylesheets debug=false filter='lessphp' output='themes/Claroline/style.css' 
+{% stylesheets debug=false filter='lessphp' output='themes/Claroline/style.css'
 '@CrisoCollaThemeBundle/Resources/views/Claroline/common.less'
 %}<link href="{{ asset('themes/Claroline/style.css') }}" rel="stylesheet" media="screen">
 {% endstylesheets %}
@@ -16,10 +16,10 @@
     <div class="navbar-inner">
 
         <div class="container">
-            <a class="brand" href="#">{{ title }}</a>
+            <a class="brand" href="{{ path("criso_colla_theme_home") }}">{{ title }}</a>
 
             {% if header is defined %}
-            {{ header }}
+            {{ header | raw }}
             {% endif %}
 
             <ul class="nav pull-right">

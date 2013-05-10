@@ -33,11 +33,10 @@
         "sensio/generator-bundle": "2.1.*",
         "jms/security-extra-bundle": "1.2.*",
         "jms/di-extra-bundle": "1.1.*",
-        "jms/di-extra-bundle": "1.1.*",
         "kriswallsmith/assetic": "1.1.*@dev",
-	"leafo/lessphp": "0.3.9",
-	"twitter/bootstrap": "2.3.1",
-	"fortawesome/fontawesome": "3.0.2" 
+        "leafo/lessphp": "0.3.9",
+        "twitter/bootstrap": "2.3.1",
+        "fortawesome/fontawesome": "3.0.2"
     },
     "scripts": {
         "post-install-cmd": [

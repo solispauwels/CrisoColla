@@ -1,15 +1,11 @@
 (function () {
     "use strict";
 
-    var asset = $("#asset").html(); //global
+    var homePath = $("#homePath").html(); //global
 
-    if (asset)
+    if (homePath)
     {
-        asset = asset + "app.php/notheme/";
-    }
-    else
-    {
-        asset = "?notheme/";
+        homePath = homePath + "notheme/";
     }
 
     /**
@@ -53,8 +49,10 @@
         var title = creatorElement.getElementsByTagName("input")[0];
         var text = creatorElement.getElementsByTagName("textarea")[0];
         var type = $(creatorElement).data("type");
+        var father = $(creatorElement).data("father");
         var generatedContent = "";
         var path = "";
+        var contentPath = "";
 
         if (id) {
             path = "content/update/" + id;
@@ -68,12 +66,13 @@
 
         if (text.value !== "" || title.value !== "")
         {
-            $.post(asset + path,
+            $.post(homePath + path,
                 {
                     "title": title.value,
                     "text": text.value,
                     "generated_content": generatedContent,
-                    "type": type
+                    "type": type,
+                    "father": father
                 }
             )
                 .done(
@@ -81,12 +80,30 @@
                     {
                         if (!isNaN(data) && data !== "")
                         {
-                            $.ajax(asset + "content/" + data + "/" + type)
+                            contentPath = "content/" + data + "/" + type;
+
+                            var insertElement = function (content) {
+                                $(creatorElement).next().prepend(content);
+                            };
+
+                            if (father) {
+                                contentPath = "content/" + data + "/" + type + "/" + father;
+                                creatorElement = parentByClassName(creatorElement, "creator" + father);
+
+                                insertElement = function (content)
+                                {
+                                    $(creatorElement).after(content);
+                                    $(creatorElement).find(".collapse").collapse("hide");
+                                };
+
+                            }
+
+                            $.ajax(homePath + contentPath)
                                 .done(
-                                    function (data)
-                                    {
-                                        $(creatorElement).next().prepend(data);
-                                    }
+                                        function (data)
+                                        {
+                                            insertElement(data);
+                                        }
                                 )
                             ;
 
@@ -97,7 +114,14 @@
                         }
                         else if (data === "true")
                         {
-                            $.ajax(asset + "content/" + id + "/" + type)
+                            contentPath = "content/" + id + "/" + type;
+
+                            if (father) {
+                                creatorElement = parentByClassName(creatorElement, "creator" + father);
+                                contentPath = "content/" + id + "/" + type + "/" + father;
+                            }
+
+                            $.ajax(homePath + contentPath)
                                  .done(
                                     function (data)
                                     {
@@ -126,10 +150,12 @@
 
     function modal(url, id, element)
     {
+        $(".modal").modal("hide");
+
         id = typeof(id) !== "undefined" ? id : null;
         element = typeof(element) !== "undefined" ? element : null;
 
-        $.ajax(asset + url)
+        $.ajax(homePath + url)
             .done(
                 function (data)
                 {
@@ -193,7 +219,7 @@
      */
     function generatedContent(textarea)
     {
-        $.post(asset + "content/graph", { "generated_content_url": textarea.value })
+        $.post(homePath + "content/graph", { "generated_content_url": textarea.value })
             .done(
                 function (data)
                 {
@@ -234,15 +260,15 @@
 
 
     $("body").on("mouseenter", ".content-element", function () {
-        $(".content-menu").addClass("hide"); // prevent some errors with the drop dawn
-        $(this).find(".content-menu").removeClass("hide");
+        $(".content-menu").first().addClass("hide"); // prevent some errors with the drop dawn
+        $(this).find(".content-menu").first().removeClass("hide");
 
     });
 
     $("body").on("mouseleave", ".content-element", function () {
-        if (!$(this).find(".content-menu").hasClass("open"))
+        if (!$(this).find(".content-menu").first().hasClass("open"))
         {
-            $(this).find(".content-menu").addClass("hide");
+            $(this).find(".content-menu").first().addClass("hide");
         }
     });
 
@@ -264,7 +290,7 @@
 
         if (id && type && element)
         {
-            $.post(asset + "content/update/" + id, { "size": size, "type": type })
+            $.post(homePath + "content/update/" + id, { "size": size, "type": type })
                 .done(
                     function (data)
                     {
@@ -294,6 +320,37 @@
         }
     });
 
+    $("body").on("click", ".content-region", function (event) {
+        var element = parentByClassName(event.target, "content-element");
+        var id = $(element).data("id");
+
+        modal("content/region/" + id, "regions", element);
+    });
+
+
+    $("body").on("click", "#regions a.border", function (event) {
+        var name = $(event.target).data("region");
+        var id = $("#regions .modal-body").data("id");
+
+        if (id && name)
+        {
+            $.ajax(homePath + "region/" + name + "/" + id)
+                .done(
+                    function ()
+                    {
+                        location.reload();
+                    }
+                )
+                .error(
+                    function ()
+                    {
+                        modal("content/error");
+                    }
+                )
+            ;
+        }
+    });
+
     $("body").on("click", ".content-delete", function (event) {
         var element = parentByClassName(event.target, "content-element");
 
@@ -306,7 +363,7 @@
 
         if (id && element)
         {
-            $.ajax(asset + "content/delete/" + id)
+            $.ajax(homePath + "content/delete/" + id)
                 .done(
                     function (data)
                     {
@@ -334,10 +391,17 @@
         var element = parentByClassName(event.target, "content-element");
         var id = $(element).data("id");
         var type = $(element).data("type");
+        var father = $(element).data("father");
 
         if (id && type && element)
         {
-            $.ajax(asset + "content/creator/" + type + "/" + id)
+            var contentPath = "content/creator/" + type + "/" + id;
+
+            if (father) {
+                contentPath = "content/creator/" + type + "/" + id + "/" + father;
+            }
+
+            $.ajax(homePath + contentPath)
                 .done(
                     function (data)
                     {
@@ -376,10 +440,18 @@
         var element = parentByClassName(event.target, "creator");
         var id = $(element).data("id");
         var type = $(element).data("type");
+        var father = $(element).data("father");
 
         if (id && type && element)
         {
-            $.ajax(asset + "content/" + id + "/" + type)
+            var contentPath = "content/" + id + "/" + type;
+
+            if (father) {
+                element = parentByClassName(element, "creator" + father);
+                contentPath = "content/" + id + "/" + type + "/" + father;
+            }
+
+            $.ajax(homePath + contentPath)
                 .done(
                     function (data)
                     {
@@ -423,7 +495,7 @@
 
     $(".content.row-fluid").sortable({
         items: "> .content-element",
-        cancel: "input,textarea,button,select,option,a.btn.dropdown-toggle,.dropdown-menu",
+        cancel: "input,textarea,button,select,option,a,a.btn.dropdown-toggle,.dropdown-menu",
         cursor: "move"
     });
 
@@ -435,7 +507,7 @@
 
             if (a && type)
             {
-                $.ajax(asset + "content/reorder/" + type + "/" + a + "/" + b)
+                $.ajax(homePath + "content/reorder/" + type + "/" + a + "/" + b)
                     .error(
                         function ()
                         {

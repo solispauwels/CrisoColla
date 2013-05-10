@@ -1,65 +1,62 @@
 html, body
 {
-	height: 100%;
-	/* The html and body elements cannot have any padding or margin. */
+    height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
 }
 
 body
 {
-	margin: 0;
+    margin: 0;
 }
 
 /* Wrapper for page content to push down footer */
 .wrap
 {
-	min-height: 100%;
-	height: auto !important;
-	height: 100%;
-	/* Negative indent footer by it's height */
-	margin: 0 auto -50px;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -50px;
 }
 
 .wrap .container
 {
-	padding-bottom:50px;
+    padding-bottom:50px;
 }
 
-/* Set the fixed height of the footer here */
 #push
 {
-	display: none;
+    display: none;
 }
 
 #push, #footer
 {
-	height: 50px;
+    height: 50px;
 }
 
 #footer
 {
-	background-color: #f5f5f5;
+    background-color: #f5f5f5;
 }
 
-/* Lastly, apply responsive CSS fixes as necessary */
 @media (max-width: 767px)
 {
-	#footer {
-	margin-left: -20px;
-	margin-right: -20px;
-	padding-left: 20px;
-	padding-right: 20px;
-	}
-}
+    .creator .navbar.navbar-static-top
+    {
+        margin:0 !important;
+    }
 
-
-.navbar-fixed-top ul.nav li a
-{
-	/*padding:10px 25px 10px 25px;*/
+    #footer {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }
 
 .brand
 {
-	margin-left:0 !important;
+    margin-left:0 !important;
 }
 
 .sub-section-header
@@ -77,94 +74,98 @@ body
 
 @media (min-width: 1200px)
 {
-	#push
-	{
-		display:block;
-	}
+    #push
+    {
+        display:block;
+    }
 }
 
 @media (min-width: 767px)
 {
-	.content.row-fluid [class*="span"]
+    .row-fluid [class*="span"]
     {
-		margin-left: 0;
-		margin-right: 0.9%;
-	}
+        margin-left:2% !important;
+    }
 
-	.content.row-fluid .span1
-	{
-		width:7.33%;
-	}
+    .row-fluid [class*="span"]:first-child
+    {
+        margin-left:0 !important;
+    }
+
+    .content.row-fluid [class*="span"]
+    {
+        margin-left: 0 !important;
+        margin-right: 0.9%;
+    }
+
+    .content.row-fluid .span1
+    {
+        width:7.33%;
+    }
 
     .content.row-fluid .span2
-	{
-		width:15.66%;
-	}
+    {
+        width:15.66%;
+    }
 
     .content.row-fluid .span3
-	{
-		width:24%;
-	}
+    {
+        width:24%;
+    }
 
     .content.row-fluid .span4
-	{
-		width:32.33%;
-	}
+    {
+        width:32.33%;
+    }
 
     .content.row-fluid .span5
-	{
-		width:40.66%;
-	}
+    {
+        width:40.66%;
+    }
 
     .content.row-fluid .span6
-	{
-		width:49%;
-	}
+    {
+        width:49%;
+    }
 
     .content.row-fluid .span7
-	{
-		width:57.33%;
-	}
+    {
+        width:57.33%;
+    }
 
     .content.row-fluid .span8
-	{
-		width:65.66%;
-	}
+    {
+        width:65.66%;
+    }
 
     .content.row-fluid .span9
-	{
-		width:74%;
-	}
+    {
+        width:74%;
+    }
 
     .content.row-fluid .span10
-	{
-		width:82.33%;
-	}
+    {
+        width:82.33%;
+    }
 
     .content.row-fluid .span11
-	{
-		width:90.66%;
-	}
+    {
+        width:90.66%;
+    }
 
     .content.row-fluid .span12
-	{
-		width:99%;
-	}
-
-
-	.content.row-fluid
-	{
-		/*border:1px solid lime;*/
-	}
+    {
+        width:99%;
+    }
 }
 
 .content-element
 {
     -webkit-animation: fadein 2s 0s 1 alternate ease-in-out;
-	-moz-animation: fadein 2s 0s 1 alternate ease-in-out;
-	-ms-animation: fadein 2s 0s 1 alternate ease-in-out;
-	-o-animation: fadein 2s 0s 1 alternate ease-in-out;
-	animation: fadein 2s 0s 1 alternate ease-in-out;
+    -moz-animation: fadein 2s 0s 1 alternate ease-in-out;
+    -ms-animation: fadein 2s 0s 1 alternate ease-in-out;
+    -o-animation: fadein 2s 0s 1 alternate ease-in-out;
+    animation: fadein 2s 0s 1 alternate ease-in-out;
 }
 
 .content-element .text
@@ -197,11 +198,11 @@ body
 /** Custom **/
 
 .border {
-	border:1px solid #ddd;
-	margin-bottom:10px;
-	background-color:@white;
-	.border-radius( 5px );
-	.box-shadow(0 1px 10px rgba(0,0,0,.2));
+    border:1px solid #ddd;
+    margin-bottom:10px;
+    background-color:@white;
+    .border-radius( 5px );
+    .box-shadow(0 1px 10px rgba(0,0,0,.2));
 }
 
 .margin
@@ -225,19 +226,31 @@ body
 {
     border:0 !important;
     margin:0 !important;
-    width:99%;
-    max-width:99%;
+    width:100%;
+    max-width:100%;
+    .box-sizing(border-box);
 }
 
-.creator .navbar
+.content-title
+{
+    height:30px !important;
+}
+
+.creator .navbar.navbar-static-top
 {
     border-top:1px solid darken(@grayLighter, 5%);
+}
+
+.creator .navbar.navbar-static-top, .creator .navbar.navbar-static-top .navbar-inner
+{
+    .border-bottom-radius(5px);
 }
 
 .creator textarea
 {
     overflow:hidden;
     .transition(all .2s linear);
+    resize: none;
 }
 
 #sizes a.border
@@ -308,32 +321,32 @@ body
 
 @-webkit-keyframes fadein
 {
-	0%{ opacity:0; }
-	50%, 100%{ opacity:1; }
+    0%{ opacity:0; }
+    50%, 100%{ opacity:1; }
 }
 
 @-moz-keyframes fadein
 {
-	0%{ opacity:0; }
-	50%, 100%{ opacity:1; }
+    0%{ opacity:0; }
+    50%, 100%{ opacity:1; }
 }
 
 @-ms-keyframes fadein
 {
-	0%{ opacity:0; }
-	50%, 100%{ opacity:1; }
+    0%{ opacity:0; }
+    50%, 100%{ opacity:1; }
 }
 
 @-o-keyframes fadein
 {
-	0%{ opacity:0; }
-	50%, 100%{ opacity:1; }
+    0%{ opacity:0; }
+    50%, 100%{ opacity:1; }
 }
 
 @keyframes fadein
 {
-	0%{ opacity:0; }
-	50%, 100%{ opacity:1; }
+    0%{ opacity:0; }
+    50%, 100%{ opacity:1; }
 }
 
 

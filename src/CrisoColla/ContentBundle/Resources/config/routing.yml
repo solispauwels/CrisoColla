@@ -3,8 +3,8 @@ criso_colla_content_create:
     defaults: { _controller: CrisoCollaContentBundle:Content:create }
 
 criso_colla_content_creator:
-    pattern:  /content/creator/{type}/{id}
-    defaults: { _controller: CrisoCollaContentBundle:Content:creator }
+    pattern:  /content/creator/{type}/{id}/{father}
+    defaults: { _controller: CrisoCollaContentBundle:Content:creator, father: null }
     requirements:
         id: \d+
 
@@ -42,6 +42,12 @@ criso_colla_content_get_by_id_and_type:
     requirements:
         id: \d+
 
+criso_colla_content_get_by_id_type_and_father:
+    pattern:  /content/{id}/{type}/{father}
+    defaults: { _controller: CrisoCollaContentBundle:Content:content }
+    requirements:
+        id: \d+
+
 criso_colla_content_error:
     pattern: /content/error
     defaults:
@@ -63,3 +69,11 @@ criso_colla_content_sizes:
 criso_colla_content_graph:
     pattern: /content/graph
     defaults: { _controller: CrisoCollaContentBundle:Content:graph }
+
+criso_colla_content_region:
+    pattern: /content/region/{id}
+    defaults: { _controller: CrisoCollaContentBundle:Content:region }
+
+criso_colla_content_to_region:
+    pattern: /region/{region}/{id}
+    defaults: { _controller: CrisoCollaContentBundle:Content:contentToRegion }

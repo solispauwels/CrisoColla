@@ -1,0 +1,43 @@
+{% if content != null %}
+
+    {% if father is not defined %}
+        <div class="content-element relative {{ size }}" data-id="{{ content.id }}" data-type="{{ type }}">
+            {% if region is defined and region == "header" %}
+                <ul class="nav">
+            {% elseif region is defined and region == "footer" %}
+                <ul class="nav nav-pills">
+            {% else %}
+                <ul class="nav nav-tabs nav-stacked">
+            {% endif %}
+    {% endif %}
+
+    {% if content.title != "" %}
+    <li {% if father is defined %}
+            class="content-element relative"
+            data-id="{{ content.id }}"
+            data-type="{{ type }}"
+            data-father="{{ father }}"
+        {% else %}
+            class="disabled"
+        {% endif %}>
+
+            <a {% if content.content is defined %}href="{{ content.content}}"{% endif %}>
+                {{ content.title }}
+                {% if father is defined and region is defined and (region == "right" or region == "left") %}
+                   <i class="icon-chevron-right pull-right"></i>
+                {% endif %}
+                {{ menu | raw }}
+            </a>
+        </li>
+    {% endif %}
+
+    {% if father is not defined %}
+
+        {% render "CrisoCollaContentBundle:Content:type" with { 'type': type, 'father': content.id } %}
+
+            </ul>
+        </div>
+
+    {% endif %}
+
+{% endif %}

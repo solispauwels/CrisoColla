@@ -2,8 +2,12 @@
 
 {{ creator | raw }}
 
-<div class="content row-fluid">
+{% if father is not defined %}
+    <div class="content row-fluid">
+        {{ content | raw }}
+    </div>
+{% else %}
     {{ content | raw }}
-</div>
+{% endif %}
 
 {% endif %}

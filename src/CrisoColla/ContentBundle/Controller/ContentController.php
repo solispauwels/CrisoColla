@@ -4,8 +4,10 @@ namespace CrisoColla\ContentBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use CrisoColla\ContentBundle\Entity\Content;
+use CrisoColla\ContentBundle\Entity\SubContent;
 use CrisoColla\ContentBundle\Entity\Type;
 use CrisoColla\ContentBundle\Entity\Content2Type;
+use CrisoColla\ThemeBundle\Entity\Content2Region;
 use Symfony\Component\HttpFoundation\Response;
 
 class ContentController extends Controller
@@ -21,40 +23,53 @@ class ContentController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      * @see CrisoColla\ThemeBundle\ThemeService()
      */
-    public function contentAction($id, $type = null)
+    public function contentAction($id, $type = null, $father = null)
     {
-        //@todo get the types and if the $type is set use this type for twig and their size
+        $variables = array();
+        $variables["type"] = $type;
 
         $manager = $this->getDoctrine()->getManager();
 
-        $content = $manager->getRepository("CrisoCollaContentBundle:Content")->findOneBy(array('id' => $id));
+        $content = $manager->getRepository("CrisoCollaContentBundle:Content")->find($id);
+        $type = $manager->getRepository("CrisoCollaContentBundle:Type")->findOneBy(array('name' => $type));
 
         if ($content) {
-            if ($type) {
+            if (!$type) {
 
-                $types = $manager->getRepository("CrisoCollaContentBundle:Type")->findOneBy(array('name' => $type));
-
-                $contentType = $manager->getRepository("CrisoCollaContentBundle:Content2Type")->findOneBy(
-                    array('content' => $content, 'type' => $types)
-                );
-
-                if ($types and $contentType) {
-                    $size = $contentType->getSize();
-                }
-            } else {
                 //default values
 
-                $type = "default";
-                $size = "span12";
+                $variables["type"] = "default";
+                $variables["size"] = "span12";
+
+            } else if ($father) {
+
+                $variables["father"] = $father;
+
+                $father = $manager->getRepository("CrisoCollaContentBundle:Content")->find($father);
+
+                $subContent = $manager->getRepository("CrisoCollaContentBundle:SubContent")->findOneBy(
+                    array('child' => $content, 'father' => $father)
+                );
+
+                $variables["size"] = $subContent->getSize();
+
+            } else {
+
+                $contentType = $manager->getRepository("CrisoCollaContentBundle:Content2Type")->findOneBy(
+                    array('content' => $content, 'type' => $type)
+                );
+
+                $variables["size"] = $contentType->getSize();
             }
 
-            $menu = $this->menuAction($id, $size, $type)->getContent();
+            $variables["menu"] = $this->menuAction($id, $variables["size"], $variables["type"], $father)->getContent();
+            $variables["content"] = $content;
 
             return $this->render(
                 $this->container->get('criso_colla_theme.theme_service')->defaultTemplate(
-                    "CrisoCollaContentBundle:types:$type.html.twig"
+                    "CrisoCollaContentBundle:types:".$variables["type"].".html.twig"
                 ),
-                array('content' => $content, 'size' => $size, 'menu' => $menu, 'type' => $type)
+                $variables
             );
         } else {
             return $this->render('CrisoCollaThemeBundle::error.html.twig', array('path' => "Content ".$id));
@@ -68,17 +83,22 @@ class ContentController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function typeAction($type)
+    public function typeAction($type, $father = null)
     {
-        $content = $this->getContentByType($type);
+        $content = $this->getContentByType($type, $father);
+
+        $variables = array();
 
         if ($content) {
-            $creator = $this->creatorAction($type)->getContent();
 
-            return $this->render(
-                'CrisoCollaContentBundle::layout.html.twig',
-                array('content' => $content, 'creator' => $creator)
-            );
+            $variables["content"] = $content;
+            $variables["creator"] = $this->creatorAction($type, null, null, $father)->getContent();
+
+            if ($father) {
+                $variables["father"] = $father;
+            }
+
+            return $this->render("CrisoCollaContentBundle::layout.html.twig", $variables);
 
         } else {
 
@@ -94,28 +114,41 @@ class ContentController extends Controller
      */
     public function createAction()
     {
+        $request = $this->get('request');
+
         $response = "false";
 
         if (isset($_POST['title']) and isset($_POST['text']) and isset($_POST['type'])) {
-            $title = $_POST['title'];
-            $text = $_POST['text'];
-            $generated = $_POST['generated_content'];
 
             $manager = $this->getDoctrine()->getManager();
 
             $content = new Content();
 
-            $content->setTitle($title);
-            $content->setContent($text);
-            $content->setGeneratedContent($generated);
+            $content->setTitle($request->get('title'));
+            $content->setContent($request->get('text'));
+            $content->setGeneratedContent($request->get('generated'));
 
             $manager->persist($content);
 
-            $type = $manager->getRepository("CrisoCollaContentBundle:Type")->findOneBy(
-                array('name' => $_POST['type'])
-            );
+            if ($request->get('father')) {
+                $father = $manager->getRepository("CrisoCollaContentBundle:Content")->find($request->get('father'));
 
-            if ($type) {
+                $first = $manager->getRepository("CrisoCollaContentBundle:SubContent")->findOneBy(
+                    array('back' => null, 'father' => $father)
+                );
+
+                $subContent = new SubContent($first);
+                $subContent->setFather($father);
+                $subContent->SetChild($content);
+
+                $manager->persist($subContent);
+
+            } else {
+
+                $type = $manager->getRepository("CrisoCollaContentBundle:Type")->findOneBy(
+                    array('name' => $_POST['type'])
+                );
+
                 $first = $manager->getRepository("CrisoCollaContentBundle:Content2Type")->findOneBy(
                     array('back' => null, 'type' => $type)
                 );
@@ -126,11 +159,11 @@ class ContentController extends Controller
                 $contentType->setType($type);
 
                 $manager->persist($contentType);
-
-                $manager->flush();
-
-                $response = $content->getId();
             }
+
+            $manager->flush();
+
+            $response = $content->getId();
         }
 
         return new Response($response);
@@ -276,13 +309,71 @@ class ContentController extends Controller
                 array('content' => $content)
             );
 
+            $childs = $manager->getRepository("CrisoCollaContentBundle:SubContent")->findBy(
+                array('father' => $content)
+            );
+
+            $fathers = $manager->getRepository("CrisoCollaContentBundle:SubContent")->findBy(
+                array('child' => $content)
+            );
+
+            $regions = $manager->getRepository("CrisoCollaThemeBundle:Content2Region")->findBy(
+                array('content' => $content)
+            );
+
             foreach ($contentTypes as $contentType) {
                 $contentType->detach();
 
                 $manager->remove($contentType);
             }
 
+            foreach ($childs as $child) {
+                $child->detach();
+                $manager->remove($child);
+
+                $this->deleteAction($child->getChild()->getId());
+            }
+
+            foreach ($fathers as $father) {
+                $father->detach();
+                $manager->remove($father);
+            }
+
+            foreach ($regions as $region) {
+                $region->detach();
+                $manager->remove($region);
+            }
+
             $manager->remove($content);
+            $manager->flush();
+
+            $response = "true";
+        }
+
+        return new Response($response);
+    }
+
+    public function contentToRegionAction($region, $id)
+    {
+        $response = "false";
+
+        $manager = $this->getDoctrine()->getManager();
+
+        $content = $manager->getRepository("CrisoCollaContentBundle:Content")->find($id);
+        $region = $manager->getRepository("CrisoCollaThemeBundle:Region")->findOneBy(
+            array("name" => $region)
+        );
+
+        if ($content and $region) {
+            $first = $manager->getRepository("CrisoCollaThemeBundle:Content2Region")->findOneBy(
+                array("back" => null, "region" => $region)
+            );
+
+            $contentRegion = new Content2Region($first);
+            $contentRegion->setRegion($region);
+            $contentRegion->setContent($content);
+
+            $manager->persist($contentRegion);
             $manager->flush();
 
             $response = "true";
@@ -298,25 +389,25 @@ class ContentController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function creatorAction($type, $id = null, $content = null)
+    public function creatorAction($type, $id = null, $content = null, $father = null)
     {
+        $path = $this->container->get('criso_colla_theme.theme_service')->defaultTemplate(
+            "CrisoCollaContentBundle:types:".$type.".creator.twig"
+        );
+
+        $variables = array('type' => $type);
+
         if ($id and !$content) {
             $manager = $this->getDoctrine()->getManager();
 
-            $content = $manager->getRepository("CrisoCollaContentBundle:Content")->find($id);
+            $variables["content"] = $manager->getRepository("CrisoCollaContentBundle:Content")->find($id);
         }
 
-        if ($content) {
-            return $this->render(
-                'CrisoCollaContentBundle::creator.html.twig',
-                array('content' => $content, 'type' => $type)
-            );
-        } else {
-            return $this->render(
-                'CrisoCollaContentBundle::creator.html.twig',
-                array('type' => $type)
-            );
+        if ($father) {
+            $variables['father'] = $father;
         }
+
+        return $this->render($path, $variables);
     }
 
     /**
@@ -328,12 +419,15 @@ class ContentController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function menuAction($id, $size, $type)
+    public function menuAction($id, $size, $type, $father = null)
     {
-        return $this->render(
-            'CrisoCollaContentBundle::menu.html.twig',
-            array('id' => $id, 'size' => $size, 'type' => $type)
-        );
+        $variables = array('id' => $id, 'size' => $size, 'type' => $type);
+
+        if ($father) {
+            $variables["father"] = $father->getId();
+        }
+
+        return $this->render('CrisoCollaContentBundle::menu.html.twig', $variables);
     }
 
     /**
@@ -351,6 +445,18 @@ class ContentController extends Controller
             'CrisoCollaContentBundle::sizes.html.twig',
             array('id' => $id, 'size' => $size, 'type' => $type)
         );
+    }
+
+    /**
+     * Render the HTML of the regions.
+     *
+     * @param \String $id The id of the content.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function regionAction($id)
+    {
+        return $this->render('CrisoCollaContentBundle::regions.html.twig', array('id' => $id));
     }
 
     /**
@@ -387,37 +493,52 @@ class ContentController extends Controller
      *
      * @return \Array
      */
-    public function getContentByType($type = "home")
+    public function getContentByType($type = "home", $father = null)
     {
         $manager = $this->getDoctrine()->getManager();
 
         $type = $manager->getRepository("CrisoCollaContentBundle:Type")->findOneBy(array('name' => $type));
 
         if ($type) {
-            $first = $manager->getRepository("CrisoCollaContentBundle:Content2Type")->findOneBy(
-                array('back' => null, 'type' => $type)
-            );
+            if ($father) {
+
+                $father = $manager->getRepository("CrisoCollaContentBundle:Content")->find($father);
+
+                $first = $manager->getRepository("CrisoCollaContentBundle:SubContent")->findOneBy(
+                    array('back' => null, 'father' => $father)
+                );
+
+            } else {
+                $first = $manager->getRepository("CrisoCollaContentBundle:Content2Type")->findOneBy(
+                    array('back' => null, 'type' => $type)
+                );
+            }
 
             if ($first) {
                 $content = "";
 
                 for ($i = 0; $i < $type->getMaxContentPage() and $first != null; $i++) {
-                    $menu = $this->menuAction(
+                    $variables = array();
+
+                    $variables["content"] = $first->getContent();
+                    $variables["size"] = $first->getSize();
+                    $variables["type"] = $type->getName();
+                    $variables["menu"] = $this->menuAction(
                         $first->getContent()->getId(),
                         $first->getSize(),
-                        $type->getName()
+                        $type->getName(),
+                        $father
                     )->getContent();
+
+                    if ($father) {
+                        $variables["father"] = $father->getId();
+                    }
 
                     $content .= $this->render(
                         $this->container->get('criso_colla_theme.theme_service')->defaultTemplate(
                             "CrisoCollaContentBundle:types:".$type->getName().".html.twig"
                         ),
-                        array(
-                            'content' => $first->getContent(),
-                            'size' => $first->getSize(),
-                            'menu' => $menu,
-                            'type' => $type->getName()
-                        )
+                        $variables
                     )->getContent();
 
                     $first = $first->getNext();

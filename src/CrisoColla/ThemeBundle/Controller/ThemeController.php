@@ -9,17 +9,16 @@ class ThemeController extends Controller
     protected $theme;
     protected $settings;
 
-    // @TODO Load from regions.
-    // @TODO Title, openGraph, Java Script, CSS and RSS
+    // @TODO Title, openGraph and RSS
 
     /**
      * Initialize this object, I can't use __construct because the services are not yet injected at that point.
      */
     public function initialize()
     {
-        if (empty($this->settings)) {
+        $manager = $this->getDoctrine()->getManager();
 
-            $manager = $this->getDoctrine()->getManager();
+        if (empty($this->settings)) {
 
             $settings = $manager->getRepository("CrisoCollaThemeBundle:Setting")->findAll();
 
@@ -27,14 +26,49 @@ class ThemeController extends Controller
         }
 
         if (empty($this->theme)) {
-            $this->theme = array
-            (
-                //"header" => "",
-                //"left" => "",
-                //"right" => "",
-                //"content" => "",
-                "footer" => "Footer",
-            );
+
+            $regions = $manager->getRepository("CrisoCollaThemeBundle:Region")->findAll();
+
+            foreach ($regions as $region) {
+
+                $content = "";
+
+                $first = $manager->getRepository("CrisoCollaThemeBundle:Content2Region")->findOneBy(
+                    array('back' => null, 'region' => $region)
+                );
+
+                for ($i = 0; $first != null; $i++) {
+
+                    $contentType = $manager->getRepository("CrisoCollaContentBundle:Content2Type")->findOneBy(
+                        array('content' => $first->getContent())
+                    );
+
+                    if ($contentType) {
+                        $type = $contentType->getType()->getName();
+                    } else {
+                        $type = "default";
+                    }
+
+                    $content .= $this->render(
+                        $this->container->get('criso_colla_theme.theme_service')->defaultTemplate(
+                            "CrisoCollaContentBundle:types:".$type.".html.twig"
+                        ),
+                        array(
+                            'content' => $first->getContent(),
+                            'size' => $first->getSize(),
+                            'menu' => "",
+                            'type' => $type,
+                            'region' => $region->getName()
+                        )
+                    )->getContent();
+
+                    $first = $first->getNext();
+                }
+
+                if ($content != "") {
+                    $this->theme[$region->getName()] = $content;
+                }
+            }
 
             $this->theme['theme'] = $this->settings->getTheme();
             $this->theme['title'] = $this->settings->getCompanyName();

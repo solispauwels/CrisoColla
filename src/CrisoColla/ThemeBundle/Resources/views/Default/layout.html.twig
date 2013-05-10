@@ -26,17 +26,17 @@
         {% endblock %}
     </head>
     <body>
-        <div id="asset" class="hide">{{ asset("") }}</div>
+        <div id="homePath" class="hide">{{ path("criso_colla_theme_home") }}</div>
         {% block header %}
         <div class="navbar navbar-fixed-top">
 
             <div class="navbar-inner">
 
                 <div class="container">
-                    <a class="brand" href="#">{{ title }}</a>
+                    <a class="brand" href="{{ path("criso_colla_theme_home") }}">{{ title }}</a>
 
                     {% if header is defined %}
-                        {{ header }}
+                        {{ header | raw }}
                     {% endif %}
 
                     <ul class="nav pull-right">
@@ -64,12 +64,12 @@
 
                     {% block content %}
                         <div class="{% if left is defined and right is defined %}span8{% elseif left is defined or rigth is defined %}span10{% else %}span12{% endif %}">
-                            {{ content | raw}}
+                            {{ content | raw }}
                         </div>
                     {% endblock %}
 
                     {% block rigth %}
-                        {% if left is defined %}
+                        {% if right is defined %}
                         <div class="span2">
                             {{ right | raw }}
                         </div>
@@ -84,7 +84,7 @@
         <div id="footer">
             <div class="container">
                 {% if footer is defined %}
-                {{ footer }}
+                {{ footer | raw }}
                 {% endif %}
             </div>
         </div>

@@ -152,7 +152,7 @@ class Content
      * @param \DateTime $modified
      * @return Content
      */
-    public function setModified($modified)
+    public function setModified($modified = null)
     {
         if ($modified) {
             $this->modified = $modified;
