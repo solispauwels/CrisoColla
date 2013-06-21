@@ -1,0 +1,47 @@
+{% extends "CrisoCollaThemeBundle:Default:layout.html.twig" %}
+{% block bootstrap %}
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% stylesheets debug=false filter='lessphp' output='themes/CrisoColla/style.css'
+'@CrisoCollaThemeBundle/Resources/views/CrisoColla/common.less'
+%}<link href="{{ asset('themes/CrisoColla/style.css') }}" rel="stylesheet" media="screen">
+{% endstylesheets %}
+
+{% endblock %}
+
+{% block header %}
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+
+    <div class="navbar-inner">
+
+        <div class="container">
+            <a class="brand" href="{{ path("criso_colla_theme_home") }}">{{ title }}</a>
+
+            {% if header is defined %}
+            {{ header | raw }}
+            {% endif %}
+
+            <ul class="nav pull-right">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#">Link</a></li>
+                <li><a href="#">Link</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block left %}
+{% endblock %}
+
+{% block content %}
+     <div class="span12">
+         {{ content | raw }}
+     </div>
+{% endblock %}
+
+
+
+
